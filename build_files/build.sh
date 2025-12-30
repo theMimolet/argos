@@ -9,15 +9,15 @@ wget https://pkg.surfacelinux.com/fedora/linux-surface.repo -O /etc/yum.repos.d/
 sed -i 's|$releasever|42|g' /etc/yum.repos.d/linux-surface.repo
 
 # Remove the base kernel packages first to avoid conflicts
-dnf5 remove \
+dnf5 remove -y \
     kernel \
     kernel-core \
     kernel-modules \
     kernel-modules-core \
-    kernel-modules-extra || true
+    kernel-modules-extra
 
 # Install the Surface kernel packages
-dnf5 install \
+dnf5 install -y \
     kernel-surface \
     kernel-surface-core \
     kernel-surface-modules \
