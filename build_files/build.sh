@@ -16,13 +16,13 @@ dnf5 -y remove kernel-devel-matched kernel-uki-virt kmod-xone
 echo ">>> Swapping Kernels <<<"
 
 # 2. Kernel Swap
-dnf5 -y --allow-lower-level swap kernel kernel-surface \
-    --replace "kernel-core=kernel-surface-core" \
-    --replace "kernel-modules=kernel-surface-modules" \
-    --replace "kernel-modules-extra=kernel-surface-modules-extra" \
-    --replace "kernel-devel=kernel-surface-devel" \
-    --replace "libwacom=libwacom-surface" \
-    --replace "libwacom-data=libwacom-surface-data"
+dnf5 -y swap kernel kernel-surface
+dnf5 -y swap kernel-core kernel-surface-core
+dnf5 -y swap kernel-modules kernel-surface-modules
+dnf5 -y swap kernel-modules-extra kernel-surface-modules-extra
+dnf5 -y swap kernel-devel kernel-surface-devel
+dnf5 -y swap libwacom libwacom-surface
+dnf5 -y swap libwacom-data libwacom-surface-data
 
 dnf5 -y install \
     kernel-surface-headers \
