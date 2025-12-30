@@ -8,21 +8,25 @@ echo ">>> Installing the Surface Kernel... <<<"
 wget https://pkg.surfacelinux.com/fedora/linux-surface.repo -O /etc/yum.repos.d/linux-surface.repo
 sed -i 's|$releasever|42|g' /etc/yum.repos.d/linux-surface.repo
 
-# Remove the base kernel packages first to avoid conflicts
-dnf5 remove -y \
+# Enable cliwrap to intercept kernel-install scripts
+# This is required for kernel operations in container builds
+rpm-ostree cliwrap install-to-root /
+
+# Override the kernel with Surface kernel
+rpm-ostree override remove \
     kernel \
     kernel-core \
     kernel-modules \
     kernel-modules-core \
-    kernel-modules-extra
+    kernel-modules-extra \
+    --install kernel-surface \
+    --install kernel-surface-core \
+    --install kernel-surface-modules \
+    --install kernel-surface-modules-core \
+    --install kernel-surface-modules-extra
 
-# Install the Surface kernel packages
-dnf5 install -y \
-    kernel-surface \
-    kernel-surface-core \
-    kernel-surface-modules \
-    kernel-surface-modules-core \
-    kernel-surface-modules-extra
+rpm-ostree cleanup -m
+ostree container commit
 
 # Install additional Surface support packages
 dnf5 install -y \
