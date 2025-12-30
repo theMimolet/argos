@@ -5,6 +5,8 @@ COPY build_files /
 # Base Image
 FROM ghcr.io/ublue-os/aurora:stable
 
+COPY --from=ghcr.io/ublue-os/bluefin:latest /usr/share/plymouth/themes/spinner /usr/share/plymouth/themes/spinner
+
 ## Other possible base images include:
 # FROM ghcr.io/ublue-os/bazzite:latest
 # FROM ghcr.io/ublue-os/bluefin-nvidia:stable
