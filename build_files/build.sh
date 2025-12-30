@@ -21,7 +21,8 @@ dnf5 remove -y \
     kernel-devel-matched \
     kernel-headers \
     kmod-xone \
-    kernel-uki-virt
+    kernel-uki-virt \
+    libwacom
 
 dnf5 install -y \
     kernel-surface \
@@ -31,9 +32,9 @@ dnf5 install -y \
     kernel-surface-modules-extra \
     kernel-surface-devel \
     kernel-surface-headers \
+    libwacom-surface \
     iptsd \
     surface-control \
-    libwacom-surface \
     surface-secureboot
 
 echo ">>> Installing additionnal packages... <<<"
