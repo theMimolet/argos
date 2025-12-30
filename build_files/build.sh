@@ -10,29 +10,24 @@ sed -i 's|$releasever|42|g' /etc/yum.repos.d/linux-surface.repo
 
 echo ">>> Swapping Kernels <<<"
 
-# 2. Kernel Swap (Combining into one transaction is cleaner)
-dnf5 -y --noautoremove install \
-    kernel-surface \
-    kernel-surface-core \
-    kernel-surface-modules \
-    kernel-surface-modules-core \
-    kernel-surface-modules-extra \
-    kernel-surface-devel \
+# 2. Kernel Swap
+dnf5 -y swap kernel kernel-surface
+dnf5 -y swap kernel-core kernel-surface-core
+dnf5 -y swap kernel-modules kernel-surface-modules
+dnf5 -y swap kernel-modules-extra kernel-surface-modules-extra
+dnf5 -y swap kernel-devel kernel-surface-devel
+dnf5 -y swap libwacom libwacom-surface
+dnf5 -y swap libwacom-data libwacom-surface-data
+
+dnf5 -y install \
     kernel-surface-headers \
-    libwacom-surface \
     iptsd \
     surface-control \
     surface-secureboot \
-    libreoffice \
-    --remove kernel \
-    --remove kernel-core \
-    --remove kernel-modules \
-    --remove kernel-modules-core \
-    --remove kernel-modules-extra \
-    --remove kernel-devel \
-    --remove kernel-uki-virt \
-    --remove libwacom \
-    --remove libwacom-data
+
+dnf5 -y remove \
+    kernel-uki-virt \
+    kmod-xone
 
 echo ">>> Installing additionnal packages... <<<"
 
