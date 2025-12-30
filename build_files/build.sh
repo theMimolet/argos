@@ -4,24 +4,30 @@ set -ouex pipefail
 
 echo ">>> Installing the Surface Kernel... <<<"
 
-RELEASE="$(rpm -E %fedora)"
-
 # Add the Linux Surface repository
 wget https://pkg.surfacelinux.com/fedora/linux-surface.repo -O /etc/yum.repos.d/linux-surface.repo
+sed -i 's|$releasever|42|g' /etc/yum.repos.d/linux-surface.repo
 
-# Install Surface packages
-rpm-ostree override replace \
-    --experimental \
-    --from repo=linux-surface \
+# Remove the base kernel packages first to avoid conflicts
+dnf5 remove \
     kernel \
     kernel-core \
     kernel-modules \
     kernel-modules-core \
-    kernel-modules-extra
+    kernel-modules-extra || true
+
+# Install the Surface kernel packages
+dnf5 install \
+    kernel-surface \
+    kernel-surface-core \
+    kernel-surface-modules \
+    kernel-surface-modules-core \
+    kernel-surface-modules-extra
 
 # Install additional Surface support packages
 dnf5 install -y \
     iptsd \
+    surface-control \
     libwacom-surface \
     surface-secureboot # The password is "surface"
 
