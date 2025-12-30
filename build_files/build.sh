@@ -10,7 +10,6 @@ sed -i 's|$releasever|42|g' /etc/yum.repos.d/linux-surface.repo
 
 # Enable cliwrap to intercept kernel-install scripts
 # This is required for kernel operations in container builds
-rpm-ostree initramfs --enable
 
 # Override the kernel with Surface kernel
 rpm-ostree override remove \
