@@ -2,17 +2,16 @@
 
 set -ouex pipefail
 
-echo ">>> Installing the Surface Kernel... <<<"
+echo ">>> Setting up the repository... <<<"
 
-# Add the Linux Surface repository
+# 1. Setup Repository
 wget https://pkg.surfacelinux.com/fedora/linux-surface.repo -O /etc/yum.repos.d/linux-surface.repo
 sed -i 's|$releasever|42|g' /etc/yum.repos.d/linux-surface.repo
 
-# Enable cliwrap to intercept kernel-install scripts
-# This is required for kernel operations in container builds
+echo ">>> Swapping Kernels <<<"
 
-# Override the kernel with Surface kernel
-rpm-ostree override remove \
+# 2. Kernel Swap (Combining into one transaction is cleaner)
+dnf5 remove -y \
     kernel \
     kernel-core \
     kernel-modules \
@@ -21,54 +20,38 @@ rpm-ostree override remove \
     kernel-devel \
     kernel-devel-matched \
     kernel-headers \
-    --install kernel-surface \
-    --install kernel-surface-core \
-    --install kernel-surface-modules \
-    --install kernel-surface-modules-core \
-    --install kernel-surface-modules-extra \
-    --install kernel-surface-devel \
-    --install kernel-surface-devel-matched \
-    --install kernel-surface-headers || \
-rpm-ostree override remove \
-    kernel \
-    kernel-core \
-    kernel-modules \
-    kernel-modules-core \
-    kernel-modules-extra \
-    --install kernel-surface \
-    --install kernel-surface-core \
-    --install kernel-surface-modules \
-    --install kernel-surface-modules-core \
-    --install kernel-surface-modules-extra
+    kmod-xone \
+    kernel-uki-virt
 
-rpm-ostree cleanup -m
-ostree container commit
-
-# Install additional Surface support packages
 dnf5 install -y \
+    kernel-surface \
+    kernel-surface-core \
+    kernel-surface-modules \
+    kernel-surface-modules-core \
+    kernel-surface-modules-extra \
+    kernel-surface-devel \
+    kernel-surface-headers \
     iptsd \
     surface-control \
     libwacom-surface \
-    surface-secureboot # The password is "surface"
+    surface-secureboot
 
-echo ">>> Installing the remaining packages... <<<"
+echo ">>> Installing additionnal packages... <<<"
 
 # Installing other packages
 
 dnf5 install libreoffice
 
-# Modifying existing files
+# 3. Cleanup and Configuration
+echo ">>> Configuring System Files... <<<"
 
-echo ">>> Configuring... <<<"
-
+mkdir -p /etc/bazaar/
 echo "    - org.libreoffice.LibreOffice" >> /etc/bazaar/blocklist.yaml
-rm usr/share/applications/Discourse.desktop
-rm usr/bin/boot-to-windows
-rm usr/share/applications/boot-to-windows.desktop
 
-# Use a COPR Example:
-#
-# dnf5 -y copr enable ublue-os/staging
-# dnf5 -y install package
-# Disable COPRs so they don't end up enabled on the final image:
-# dnf5 -y copr disable ublue-os/staging
+rm -f /usr/share/applications/Discourse.desktop
+rm -f /usr/bin/boot-to-windows
+rm -f /usr/share/applications/boot-to-windows.desktop
+
+# 4. Finalizing
+# Cleanup dnf metadata to keep image size down
+dnf5 clean all
