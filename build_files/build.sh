@@ -11,11 +11,11 @@ sed -i 's|$releasever|43|g' /etc/yum.repos.d/linux-surface.repo
 echo ">>> Bypassing dracut / rpmostree <<<"
 
 pushd /usr/lib/kernel/install.d
-mv -f 05-rpmostree.install 05-rpmostree.install.bak
-mv -f 50-dracut.install 50-dracut.install.bak
+mv 05-rpmostree.install 05-rpmostree.install.bak
+mv 50-dracut.install 50-dracut.install.bak
 printf '%s\n' '#!/bin/sh' 'exit 0' > 05-rpmostree.install
 printf '%s\n' '#!/bin/sh' 'exit 0' > 50-dracut.install
-chmod +x 05-rpmostree.install 50-dracut.install
+chmod +x  05-rpmostree.install 50-dracut.install
 popd
 
 echo ">>> Cleaning up old Kernel <<<"
@@ -60,7 +60,7 @@ echo ">>> Installing additional packages... <<<"
 
 # Installing other packages
 
-dnf5 install libreoffice
+dnf5 -y install libreoffice
 
 # 3. Cleanup and Configuration
 echo ">>> Configuring System Files... <<<"
