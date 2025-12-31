@@ -18,30 +18,36 @@ printf '%s\n' '#!/bin/sh' 'exit 0' > 50-dracut.install
 chmod +x  05-rpmostree.install 50-dracut.install
 popd
 
-echo ">>> Cleaning up old Kernel <<<"
+echo ">>> Swaping Surface Kernel <<<"
 
-dnf5 -y remove --no-autoremove kernel kernel-core kernel-modules kernel-modules-core kernel-modules-extra kernel-tools kernel-tools-libs libwacom libwacom-data
+dnf5 -y swap kernel kernel-surface
+dnf5 -y swap kernel-core kernel-surface-core
+dnf5 -y swap kernel-modules kernel-surface-modules
+dnf5 -y swap kernel-modules-core kernel-surface-modules-core
+dnf5 -y swap kernel-modules-extra kernel-surface-modules-extra
+dnf5 -y swap kernel-modules-akmods kernel-surface-modules-akmods
+dnf5 -y swap kernel-devel kernel-surface-devel
+dnf5 -y swap kernel-devel-matched kernel-surface-devel-matched
+dnf5 -y swap kernel-tools kernel-surface-tools
+dnf5 -y swap kernel-tools-libs kernel-surface-tools-libs
+dnf5 -y swap kernel-common kernel-surface-common
+dnf5 -y swap libwacom libwacom-surface
+dnf5 -y swap libwacom-data libwacom-surface-data
 
-echo ">>> Installing Surface Kernel <<<"
-
-surface_pkgs=(
-    kernel-surface
-    kernel-surface-core
-    kernel-surface-modules
-    kernel-surface-modules-core
-    kernel-surface-modules-extra
-    kernel-surface-modules-akmods
-    kernel-surface-devel
-    kernel-surface-devel-matched
-    kernel-surface-tools
-    kernel-surface-tools-libs
-    kernel-surface-common
-    libwacom-surface
+dnf5 versionlock add \
+    kernel-surface \
+    kernel-surface-core \
+    kernel-surface-modules \
+    kernel-surface-modules-core \
+    kernel-surface-modules-extra \
+    kernel-surface-modules-akmods \
+    kernel-surface-devel \
+    kernel-surface-devel-matched \
+    kernel-surface-tools \
+    kernel-surface-tools-libs \
+    kernel-surface-common \
+    libwacom-surface \
     libwacom-surface-data
-)
-
-dnf5 -y install $surface_pkgs
-dnf5 versionlock add $surface_pkgs
 
 pushd /usr/lib/kernel/install.d
 mv -f 05-rpmostree.install.bak 05-rpmostree.install
