@@ -21,11 +21,11 @@ popd
 echo ">>> Swaping Surface Kernel <<<"
 
 dnf5 -y swap kernel kernel-surface
-#dnf5 -y swap kernel-core kernel-surface-core
+#dnf5 -y swap kernel-core kernel-surface-core # with kernel-surface
 #dnf5 -y swap kernel-modules kernel-surface-modules
 #dnf5 -y swap kernel-modules-core kernel-surface-modules-core
 dnf5 -y swap kernel-modules-extra kernel-surface-modules-extra
-dnf5 -y swap kernel-modules-akmods kernel-surface-modules-akmods
+#dnf5 -y swap kernel-modules-akmods kernel-surface-modules-akmods # not needed
 dnf5 -y swap kernel-devel kernel-surface-devel
 dnf5 -y swap kernel-devel-matched kernel-surface-devel-matched
 dnf5 -y swap kernel-tools kernel-surface-tools
@@ -40,7 +40,6 @@ dnf5 versionlock add \
     kernel-surface-modules \
     kernel-surface-modules-core \
     kernel-surface-modules-extra \
-    kernel-surface-modules-akmods \
     kernel-surface-devel \
     kernel-surface-devel-matched \
     kernel-surface-tools \
@@ -48,6 +47,8 @@ dnf5 versionlock add \
     kernel-surface-common \
     libwacom-surface \
     libwacom-surface-data
+
+    #kernel-surface-modules-akmods \
 
 pushd /usr/lib/kernel/install.d
 mv -f 05-rpmostree.install.bak 05-rpmostree.install
