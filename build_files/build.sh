@@ -6,7 +6,7 @@ echo ">>> Setting up the repository... <<<"
 
 # 1. Setup Repository
 wget https://pkg.surfacelinux.com/fedora/linux-surface.repo -O /etc/yum.repos.d/linux-surface.repo
-sed -i 's|$releasever|42|g' /etc/yum.repos.d/linux-surface.repo
+sed -i 's|$releasever|43|g' /etc/yum.repos.d/linux-surface.repo
 
 echo ">>> Cleaning up version locks <<<"
 
