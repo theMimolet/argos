@@ -11,18 +11,31 @@ sed -i 's|$releasever|43|g' /etc/yum.repos.d/linux-surface.repo
 echo ">>> Cleaning up version locks <<<"
 
 # We must remove these first or they will block the swap with version requirements
-dnf5 -y remove kernel-devel-matched kernel-uki-virt kmod-xone
+#dnf5 -y remove kernel-devel-matched kernel-uki-virt kmod-xone
 
 echo ">>> Swapping Kernels <<<"
 
 # 2. Kernel Swap
-dnf5 -y swap kernel kernel-surface
-dnf5 -y swap kernel-core kernel-surface-core
-dnf5 -y swap kernel-modules kernel-surface-modules
-dnf5 -y swap kernel-modules-extra kernel-surface-modules-extra
-dnf5 -y swap kernel-devel kernel-surface-devel
-dnf5 -y swap libwacom libwacom-surface
-dnf5 -y swap libwacom-data libwacom-surface-data
+#dnf5 -y swap kernel kernel-surface
+#dnf5 -y swap kernel-core kernel-surface-core
+#dnf5 -y swap kernel-modules kernel-surface-modules
+#dnf5 -y swap kernel-modules-extra kernel-surface-modules-extra
+#dnf5 -y swap kernel-devel kernel-surface-devel
+#dnf5 -y swap libwacom libwacom-surface
+#dnf5 -y swap libwacom-data libwacom-surface-data
+
+# linux-surface provides this command for rpm-ostree builds:
+
+rpm-ostree override replace ./*.rpm \
+    --remove kernel-core \
+    --remove kernel-modules \
+    --remove kernel-modules-extra \
+        --remove libwacom \
+        --remove libwacom-data \
+    --install kernel-surface \
+    --install iptsd \
+        --install libwacom-surface \
+        --install libwacom-surface-data
 
 dnf5 -y install \
     kernel-surface-headers \
