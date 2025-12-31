@@ -21,9 +21,9 @@ popd
 echo ">>> Swaping Surface Kernel <<<"
 
 dnf5 -y swap kernel kernel-surface
-dnf5 -y swap kernel-core kernel-surface-core
-dnf5 -y swap kernel-modules kernel-surface-modules
-dnf5 -y swap kernel-modules-core kernel-surface-modules-core
+#dnf5 -y swap kernel-core kernel-surface-core
+#dnf5 -y swap kernel-modules kernel-surface-modules
+#dnf5 -y swap kernel-modules-core kernel-surface-modules-core
 dnf5 -y swap kernel-modules-extra kernel-surface-modules-extra
 dnf5 -y swap kernel-modules-akmods kernel-surface-modules-akmods
 dnf5 -y swap kernel-devel kernel-surface-devel
@@ -57,10 +57,11 @@ popd
 echo ">>> Installing Kernel related packages <<<"
 
 dnf5 -y install \
-    iptsd \
     surface-control \
     surface-dtx-daemon \
     surface-secureboot
+
+    # iptsd
 
 echo ">>> Installing additional packages... <<<"
 
