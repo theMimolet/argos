@@ -8,42 +8,55 @@ echo ">>> Setting up the repository... <<<"
 wget https://pkg.surfacelinux.com/fedora/linux-surface.repo -O /etc/yum.repos.d/linux-surface.repo
 sed -i 's|$releasever|43|g' /etc/yum.repos.d/linux-surface.repo
 
-echo ">>> Cleaning up version locks <<<"
+echo ">>> Bypassing dracut / rpmostree <<<"
 
-# We must remove these first or they will block the swap with version requirements
-#dnf5 -y remove kernel-devel-matched kernel-uki-virt kmod-xone
+pushd /usr/lib/kernel/install.d
+mv -f 05-rpmostree.install 05-rpmostree.install.bak
+mv -f 50-dracut.install 50-dracut.install.bak
+printf '%s\n' '#!/bin/sh' 'exit 0' > 05-rpmostree.install
+printf '%s\n' '#!/bin/sh' 'exit 0' > 50-dracut.install
+chmod +x 05-rpmostree.install 50-dracut.install
+popd
 
-echo ">>> Swapping Kernels <<<"
+echo ">>> Cleaning up old Kernel <<<"
 
-# 2. Kernel Swap
-#dnf5 -y swap kernel kernel-surface
-#dnf5 -y swap kernel-core kernel-surface-core
-#dnf5 -y swap kernel-modules kernel-surface-modules
-#dnf5 -y swap kernel-modules-extra kernel-surface-modules-extra
-#dnf5 -y swap kernel-devel kernel-surface-devel
-#dnf5 -y swap libwacom libwacom-surface
-#dnf5 -y swap libwacom-data libwacom-surface-data
+dnf5 -y remove --no-autoremove kernel kernel-core kernel-modules kernel-modules-core kernel-modules-extra kernel-tools kernel-tools-libs libwacom libwacom-data
 
-# linux-surface provides this command for rpm-ostree builds:
+echo ">>> Installing Surface Kernel <<<"
 
-rpm-ostree override replace ./*.rpm \
-    --remove kernel-core \
-    --remove kernel-modules \
-    --remove kernel-modules-extra \
-        --remove libwacom \
-        --remove libwacom-data \
-    --install kernel-surface \
-    --install iptsd \
-        --install libwacom-surface \
-        --install libwacom-surface-data
+surface_pkgs=(
+    kernel-surface
+    kernel-surface-core
+    kernel-surface-modules
+    kernel-surface-modules-core
+    kernel-surface-modules-extra
+    kernel-surface-modules-akmods
+    kernel-surface-devel
+    kernel-surface-devel-matched
+    kernel-surface-tools
+    kernel-surface-tools-libs
+    kernel-surface-common
+    libwacom-surface
+    libwacom-surface-data
+)
+
+dnf5 -y install $surface_pkgs
+dnf5 versionlock add $surface_pkgs
+
+pushd /usr/lib/kernel/install.d
+mv -f 05-rpmostree.install.bak 05-rpmostree.install
+mv -f 50-dracut.install.bak 50-dracut.install
+popd
+
+echo ">>> Installing Kernel related packages <<<"
 
 dnf5 -y install \
-    kernel-surface-headers \
     iptsd \
     surface-control \
-    surface-secureboot \
+    surface-dtx-daemon \
+    surface-secureboot
 
-echo ">>> Installing additionnal packages... <<<"
+echo ">>> Installing additional packages... <<<"
 
 # Installing other packages
 
