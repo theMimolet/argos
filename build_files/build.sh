@@ -28,11 +28,11 @@ dnf5 -y swap kernel-modules-extra kernel-surface-modules-extra
 #dnf5 -y swap kernel-modules-akmods kernel-surface-modules-akmods # not needed
 dnf5 -y swap kernel-devel-matched kernel-surface-devel-matched
 dnf5 -y swap kernel-devel kernel-surface-devel
-dnf5 -y swap kernel-tools kernel-surface-tools
-dnf5 -y swap kernel-tools-libs kernel-surface-tools-libs
-dnf5 -y swap kernel-common kernel-surface-common
-dnf5 -y swap libwacom libwacom-surface
+#dnf5 -y swap kernel-tools kernel-surface-tools
+#dnf5 -y swap kernel-tools-libs kernel-surface-tools-libs
+#dnf5 -y swap kernel-common kernel-surface-common
 dnf5 -y swap libwacom-data libwacom-surface-data
+dnf5 -y swap libwacom libwacom-surface
 
 dnf5 versionlock add \
     kernel-surface \
