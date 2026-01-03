@@ -20,8 +20,6 @@ popd
 
 echo ">>> Swaping Surface Kernel <<<"
 
-rm -rf /usr/lib/modules/* # Removing existing kernel modules to avoid conflicts while linting
-
 dnf5 -y swap kernel kernel-surface
 dnf5 -y swap kernel-modules-extra kernel-surface-modules-extra
 dnf5 -y swap kernel-devel-matched kernel-surface-devel-matched
@@ -70,6 +68,8 @@ echo "    - org.libreoffice.LibreOffice" >> /etc/bazaar/blocklist.yaml
 rm -f /usr/share/applications/Discourse.desktop
 rm -f /usr/bin/boot-to-windows
 rm -f /usr/share/applications/boot-to-windows.desktop
+
+ls -a /usr/lib/modules # Debugging line to verify modules are present
 
 # 4. Finalizing
 # Cleanup dnf metadata to keep image size down
