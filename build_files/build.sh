@@ -41,6 +41,8 @@ dnf5 versionlock add \
     libwacom-surface \
     libwacom-surface-data
 
+rm -rf /usr/lib/modules/6.17.8-300.fc43.x86_64
+
 pushd /usr/lib/kernel/install.d
 mv -f 05-rpmostree.install.bak 05-rpmostree.install
 mv -f 50-dracut.install.bak 50-dracut.install
@@ -68,8 +70,6 @@ echo "    - org.libreoffice.LibreOffice" >> /etc/bazaar/blocklist.yaml
 rm -f /usr/share/applications/Discourse.desktop
 rm -f /usr/bin/boot-to-windows
 rm -f /usr/share/applications/boot-to-windows.desktop
-
-ls -a /usr/lib/modules # Debugging line to verify modules are present
 
 # 4. Finalizing
 # Cleanup dnf metadata to keep image size down
