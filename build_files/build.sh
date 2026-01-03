@@ -20,17 +20,12 @@ popd
 
 echo ">>> Swaping Surface Kernel <<<"
 
+rm -rf /usr/lib/modules/* # Removing existing kernel modules to avoid conflicts while linting
+
 dnf5 -y swap kernel kernel-surface
-#dnf5 -y swap kernel-core kernel-surface-core # with kernel-surface
-#dnf5 -y swap kernel-modules kernel-surface-modules
-#dnf5 -y swap kernel-modules-core kernel-surface-modules-core
 dnf5 -y swap kernel-modules-extra kernel-surface-modules-extra
-#dnf5 -y swap kernel-modules-akmods kernel-surface-modules-akmods # not needed
 dnf5 -y swap kernel-devel-matched kernel-surface-devel-matched
 dnf5 -y swap kernel-devel kernel-surface-devel
-#dnf5 -y swap kernel-tools kernel-surface-tools
-#dnf5 -y swap kernel-tools-libs kernel-surface-tools-libs
-#dnf5 -y swap kernel-common kernel-surface-common
 dnf5 -y swap libwacom-data libwacom-surface-data
 dnf5 -y swap libwacom libwacom-surface
 
@@ -48,8 +43,6 @@ dnf5 versionlock add \
     libwacom-surface \
     libwacom-surface-data
 
-    #kernel-surface-modules-akmods \
-
 pushd /usr/lib/kernel/install.d
 mv -f 05-rpmostree.install.bak 05-rpmostree.install
 mv -f 50-dracut.install.bak 50-dracut.install
@@ -61,8 +54,6 @@ dnf5 -y install \
     surface-control \
     surface-dtx-daemon \
     surface-secureboot
-
-    # iptsd
 
 echo ">>> Installing additional packages... <<<"
 
